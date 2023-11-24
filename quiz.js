@@ -21,8 +21,10 @@ const scoreEl = document.getElementById("score");
 //setting question the text-content
 questionEl.textContent = question;
 
+const suffledOptions = suffleOptions(options);
+
 /*** Populating the options div with the buttons ***/
-options.forEach((opt) => {
+suffledOptions.forEach((opt) => {
   //creating button & appending it to the option div
   const btn = document.createElement("button");
   btn.textContent = opt;
@@ -43,3 +45,13 @@ options.forEach((opt) => {
     optionEl.textContent = "";
   });
 });
+
+/*** Suffle Options ***/
+function suffleOptions(options) {
+  for (let i = options.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * i + 1);
+    [options[i], options[j]] = [options[j], options[i]];
+  }
+  console.log(options);
+  return options;
+}
