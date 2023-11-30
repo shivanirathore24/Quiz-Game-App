@@ -1,50 +1,96 @@
-const questionObj = {
-  category: "Food & Drink",
-  id: "qa-1",
-  correctAnswer: "Three",
-  options: ["Two", "Three", "Four", "Five"],
-  question: "How many pieces of bun are in a Mcdonald's Big Mac?",
-};
+const quesJSON = [
+  {
+    correctAnswer: "Three ",
+    options: ["Two", "Three ", "Four", "Five"],
+    question: "How many pieces of bun are in a Mcdonald's Big Mac?",
+  },
+  {
+    correctAnswer: "L. Frank Baum",
+    options: [
+      "Suzanne Collins",
+      "James Fenimore Cooper",
+      "L. Frank Baum",
+      "Donna Leon",
+    ],
+    question: "Which author wrote 'The Wonderful Wizard of Oz'?",
+  },
+  {
+    correctAnswer: "Atlanta United",
+    options: [
+      "Atlanta United",
+      "Atlanta Impact",
+      "Atlanta Bulls",
+      "Atlanta Stars",
+    ],
+    question: "Which of these is a soccer team based in Atlanta?",
+  },
+  {
+    correctAnswer: "A Nanny",
+    options: ["A Sow", "A Lioness", "A Hen", "A Nanny"],
+    question: "A female goat is known as what?",
+  },
+  {
+    correctAnswer: "P. L. Travers",
+    options: [
+      "J. R. R. Tolkien",
+      "P. L. Travers",
+      "Lewis Carroll",
+      "Enid Blyton",
+    ],
+    question: "Which author wrote 'Mary Poppins'?",
+  },
+];
 
 /** Manipulating DOM ***/
-
-//destructing properties from Object
-const { correctAnswer, options, question } = questionObj;
-
 let score = 0;
+let currentQuestion = 0;
 
 //accessing all the elements
 const questionEl = document.getElementById("question");
 const optionEl = document.getElementById("options");
 const scoreEl = document.getElementById("score");
+showQuestion();
 
-//setting question the text-content
-questionEl.textContent = question;
+function showQuestion() {
+  //destructing properties from Object
+  const { correctAnswer, options, question } = quesJSON[currentQuestion];
 
-const suffledOptions = suffleOptions(options);
+  //setting question the text-content
+  questionEl.textContent = question;
 
-/*** Populating the options div with the buttons ***/
-suffledOptions.forEach((opt) => {
-  //creating button & appending it to the option div
-  const btn = document.createElement("button");
-  btn.textContent = opt;
-  optionEl.appendChild(btn);
+  const suffledOptions = suffleOptions(options);
 
-  //event handling on the button
-  btn.addEventListener("click", () => {
-    if (opt === correctAnswer) {
-      score++;
-    } else {
-      score = score - 0.25;
-    }
-    //console.log(score);
-    scoreEl.textContent = `Score: ${score}`;
+  /*** Populating the options div with the buttons ***/
+  suffledOptions.forEach((opt) => {
+    //creating button & appending it to the option div
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    optionEl.appendChild(btn);
 
-    //after attempting quetion, options shouldn't show and display Quiz Completed
-    questionEl.textContent = "Quiz Completed !!";
-    optionEl.textContent = "";
+    //event handling on the button
+    btn.addEventListener("click", () => {
+      if (opt === correctAnswer) {
+        score++;
+      } else {
+        score = score - 0.25;
+      }
+      //console.log(score);
+      scoreEl.textContent = `Score: ${score}`;
+      nextQuestion();
+    });
   });
-});
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  //console.log(currentQuestion);
+  optionEl.textContent = "";
+  if (currentQuestion >= quesJSON.length) {
+    questionEl.textContent = "Quiz Completed !!";
+  } else {
+    showQuestion();
+  }
+}
 
 /*** Suffle Options ***/
 function suffleOptions(options) {
