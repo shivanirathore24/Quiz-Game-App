@@ -44,12 +44,20 @@ const quesJSON = [
 /** Manipulating DOM ***/
 let score = 0;
 let currentQuestion = 0;
+const totalScore = quesJSON.length;
 
 //accessing all the elements
 const questionEl = document.getElementById("question");
 const optionEl = document.getElementById("options");
 const scoreEl = document.getElementById("score");
+const nextEL = document.getElementById("next");
+
 showQuestion();
+
+nextEL.addEventListener("click", () => {
+  scoreEl.textContent = `Score: ${score}/ ${totalScore}`;
+  nextQuestion();
+});
 
 function showQuestion() {
   //destructing properties from Object
@@ -75,7 +83,7 @@ function showQuestion() {
         score = score - 0.25;
       }
       //console.log(score);
-      scoreEl.textContent = `Score: ${score}`;
+      scoreEl.textContent = `Score: ${score}/ ${totalScore}`;
       nextQuestion();
     });
   });
@@ -87,6 +95,7 @@ function nextQuestion() {
   optionEl.textContent = "";
   if (currentQuestion >= quesJSON.length) {
     questionEl.textContent = "Quiz Completed !!";
+    nextEL.remove();
   } else {
     showQuestion();
   }
